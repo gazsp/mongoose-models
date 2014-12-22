@@ -1,6 +1,6 @@
 # mongoose-models
 
-An extension of Mongoose's models
+An extension of Mongoose's models. Forked and updated.
 
 ## Install
 
@@ -18,6 +18,8 @@ require('mongoose-models').init({
 });
 ```
 
+*Note* ```modelPath``` should be absolute.
+
 ## Usage
 
 ##### models/Person.js
@@ -26,11 +28,18 @@ require('mongoose-models').init({
 var models = require('mongoose-models');
 
 var Person = models.create('Person', {
-	
-	// If this is given and truthy, the mongoose-types timestamps
-	// plugin will be loaded for this model creating automatically
-	// updating 'createdAt' and 'updatedAt' properties
-	useTimestamps: true,
+    options: {
+        // If this is given and truthy, the mongoose-types timestamps
+        // plugin will be loaded for this model creating automatically
+        // updating 'createdAt' and 'updatedAt' properties
+        useTimestamps: true,
+
+        // If given and truthy, model will use mongoosastic static plugin
+        useElastic: false,
+
+        // If given and truthy, model will use mongoose-keywordize plugin
+        usekeyword: false
+    }
 	
 	// Define your mongoose schema here
 	schema: {
@@ -50,11 +59,9 @@ var Person = models.create('Person', {
 	//  });
 	//
 	methods: {
-		
 		sendEmail: function(subject, msg) {
 			someMailingLib.sendEmail(this.email, subject, msg);
 		}
-		
 	},
 	
 	// Anything other than the above properties is considered a static
@@ -72,7 +79,6 @@ var Person = models.create('Person', {
 		}
 		Person.findOne(lookup, callback);
 	}
-	
 });
 ```
 
@@ -80,11 +86,10 @@ var Person = models.create('Person', {
 
 ```javascript
 var models = require('mongoose-models');
-
-var Person = models.require('Person')();
+var Person = models.require('Person');
 
 Person.findByName('bob', function(err, bob) {
-	
+	// ...
 });
 ```
 
@@ -97,7 +102,7 @@ Circular references are rather messy in Mongoose. To make this much easier there
 ```javascript
 var models = require('mongoose-models');
 
-var Bar = models.require('Bar')();
+var Bar = models.require('Bar');
 
 models.create('Foo', {
 	schema: {
@@ -111,7 +116,7 @@ models.create('Foo', {
 ```javascript
 var models = require('mongoose-models');
 
-var Foo = models.require('Foo')();
+var Foo = models.require('Foo');
 
 models.create('Bar', {
 	schema: {
@@ -199,3 +204,14 @@ Stored 2 arguments in "foos"
 }
 ```
 
+### Changes from previous versions
+
+* Read me updated, code tidy up
+
+#### Breaking changes from origin version
+
+* Disabled external schema definitions
+* Disabled AMPQ and Mail functionality
+* Disabled audit log (for now)
+* Removed need to use ```()``` on the end of ```model = models.require('Model')()```
+* Plug-ins now all loaded from ```options``` key on model definition
