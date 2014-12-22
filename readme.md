@@ -2,11 +2,13 @@
 
 An extension of Mongoose's models. Forked and updated.
 
+
 ## Install
 
 ```bash
 $ npm install mongoose-models
 ```
+
 
 ## Init
 
@@ -18,7 +20,8 @@ require('mongoose-models').init({
 });
 ```
 
-*Note* ```modelPath``` should be absolute.
+*Note:* ```modelPath``` should be absolute.
+
 
 ## Usage
 
@@ -28,19 +31,6 @@ require('mongoose-models').init({
 var models = require('mongoose-models');
 
 var Person = models.create('Person', {
-    options: {
-        // If this is given and truthy, the mongoose-types timestamps
-        // plugin will be loaded for this model creating automatically
-        // updating 'createdAt' and 'updatedAt' properties
-        useTimestamps: true,
-
-        // If given and truthy, model will use mongoosastic static plugin
-        useElastic: false,
-
-        // If given and truthy, model will use mongoose-keywordize plugin
-        usekeyword: false
-    }
-	
 	// Define your mongoose schema here
 	schema: {
 		firstName: String,
@@ -51,6 +41,13 @@ var Person = models.create('Person', {
 		email: models.types.Email,
 		website: models.types.Url
 	},
+
+    // Register plugins for schema
+    registerPlugins: function(schema) {
+        // Examples:
+        // schema.plugin(mongooseUtils.timestamp);
+        // schema.plugin(mongoosastic, { pluginOption: true, anotherPluginOption: false });
+    },
 	
 	// Instance methods can be defined here, eg.
 	//  
@@ -58,7 +55,7 @@ var Person = models.create('Person', {
 	//    bob.sendEmail(...);
 	//  });
 	//
-	methods: {
+	instanceMethods: {
 		sendEmail: function(subject, msg) {
 			someMailingLib.sendEmail(this.email, subject, msg);
 		}
@@ -92,6 +89,7 @@ Person.findByName('bob', function(err, bob) {
 	// ...
 });
 ```
+
 
 ### Circular References
 
@@ -151,17 +149,21 @@ models.create('Baz', {
 });
 ```
 
+
 ### models.require(...)
 
 The `models.require` method that loads models does not return the model directly, but instead returns a function that can be used to fetch the model. This is so that when two models make use of each other, the models are allowed time to set themselves up. That is why models are loaded as `models.require(...)()`. This returned function has a number of properties on it that can be used as well.
+
 
 #### models.require(...).model
 
 The model function itself (once defined). This is the same as what is returned from the getter function.
 
+
 #### models.require(...).schema
 
 The mongoose schema object. This can be accessed immediately without waiting for the model to be created if you need access sooner. This could be used as an alternative to the `$circular` syntax described above.
+
 
 #### models.require(...).resolve( callback )
 
@@ -171,6 +173,7 @@ Defines a callback to be run once the model has been created.
 var Foo = models.require('Foo');
 Foo.resolve(function() { Foo = Foo.model; });
 ```
+
 
 ### Debugging REPL
 
@@ -204,9 +207,13 @@ Stored 2 arguments in "foos"
 }
 ```
 
+
 ### Changes from previous versions
 
 * Read me updated, code tidy up
+* Allow loading of Coffeescript model files
+* Switched to generic plug-in loader
+* Removed bulk schema loading
 
 #### Breaking changes from origin version
 
@@ -214,4 +221,4 @@ Stored 2 arguments in "foos"
 * Disabled AMPQ and Mail functionality
 * Disabled audit log (for now)
 * Removed need to use ```()``` on the end of ```model = models.require('Model')()```
-* Plug-ins now all loaded from ```options``` key on model definition
+* Plug-ins now all loaded from generic loader function
