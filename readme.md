@@ -100,13 +100,13 @@ var models = require('mongoose-models');
 
 var MyInstanceMixin = {
     getObjectId: function() {
-        console.log('Hello world, from model instance ' + $this._id);
+        console.log('Hello world, from model instance ' + this._id);
     }
 }
 
 var MyStaticMixin = {
     getModelName: function() {
-        console.log('Hello world, from model ' + $this.modelName);
+        console.log('Hello world, from model ' + this.modelName);
     }
 }
 
