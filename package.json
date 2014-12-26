@@ -16,7 +16,7 @@
     "db",
     "model"
   ],
-  "author": "marco",
+  "author": "marco, gazsp",
   "license": "MIT",
   "dependencies": {
     "colors": "0.6.0-1",

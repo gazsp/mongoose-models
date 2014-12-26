@@ -90,6 +90,43 @@ Person.findByName('bob', function(err, bob) {
 });
 ```
 
+### Mixins
+
+Functions can be mixed in to the instance or as static methods.
+
+```javascript
+
+var models = require('mongoose-models');
+
+var MyInstanceMixin = {
+    getObjectId: function() {
+        console.log('Hello world, from model instance ' + $this._id);
+    }
+}
+
+var MyStaticMixIn = {
+    getModelName: function() {
+        console.log('Hello world, from model ' + $this.modelName);
+    }
+}
+
+var Person = models.create('Person', {
+    // ...
+    staticMixins: [ MyStaticMixIn ],
+    instanceMixins: [ MyInstanceMixin ],
+    // ...
+});
+
+// ...
+
+Person = models.require('Person');
+Person.getModelName();
+
+Person.find(id, function(err, doc) {
+    doc.getObjectId();
+});
+
+```
 
 ### Circular References
 
