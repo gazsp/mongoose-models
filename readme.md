@@ -104,7 +104,7 @@ var MyInstanceMixin = {
     }
 }
 
-var MyStaticMixIn = {
+var MyStaticMixin = {
     getModelName: function() {
         console.log('Hello world, from model ' + $this.modelName);
     }
@@ -112,7 +112,7 @@ var MyStaticMixIn = {
 
 var Person = models.create('Person', {
     // ...
-    staticMixins: [ MyStaticMixIn ],
+    staticMixins: [ MyStaticMixin ],
     instanceMixins: [ MyInstanceMixin ],
     // ...
 });
