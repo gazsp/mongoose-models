@@ -83,7 +83,7 @@ var Person = models.create('Person', {
 
 ```javascript
 var models = require('mongoose-models');
-var Person = models.require('Person');
+var Person = models.require('Person')();
 
 Person.findByName('bob', function(err, bob) {
 	// ...
@@ -119,7 +119,7 @@ var Person = models.create('Person', {
 
 // ...
 
-Person = models.require('Person');
+Person = models.require('Person')();
 Person.getModelName();
 
 Person.find(id, function(err, doc) {
@@ -137,7 +137,7 @@ Circular references are rather messy in Mongoose. To make this much easier there
 ```javascript
 var models = require('mongoose-models');
 
-var Bar = models.require('Bar');
+var Bar = models.require('Bar')();
 
 models.create('Foo', {
 	schema: {
@@ -151,7 +151,7 @@ models.create('Foo', {
 ```javascript
 var models = require('mongoose-models');
 
-var Foo = models.require('Foo');
+var Foo = models.require('Foo')();
 
 models.create('Bar', {
 	schema: {
@@ -257,5 +257,4 @@ Stored 2 arguments in "foos"
 * Disabled external schema definitions
 * Disabled AMPQ and Mail functionality
 * Disabled audit log (for now)
-* Removed need to use ```()``` on the end of ```model = models.require('Model')()```
 * Plug-ins now all loaded from generic loader function
